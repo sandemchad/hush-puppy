@@ -1,7 +1,7 @@
 console.log("Hush puppy!")
 
 if (typeof findParent != 'function') {
-  window.findParent = function(element, selector) {
+  var findParent = function(element, selector) {
     var parents = [];
 
     while (element = element.parentElement.closest(selector)) {
@@ -10,7 +10,7 @@ if (typeof findParent != 'function') {
     return parents[0]
   };
 
-  window.hideElement = function(element) {
+  var hideElement = function(element) {
     if (element) {
       element.style.display = "none";
     }
