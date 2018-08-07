@@ -1,5 +1,7 @@
 console.log("Hush puppy!")
-
+if (typeof puppyHushed === "undefined") {
+  var puppyHushed = false
+}
 if (typeof findParent != 'function') {
   var findParent = function(element, selector) {
     var parents = [];
@@ -15,9 +17,18 @@ if (typeof findParent != 'function') {
       element.style.display = "none";
     }
   }
+
+  var showElement = function(element) {
+    if (element) {
+      element.style.display = "block";
+    }
+  }
 }
 
-for (var element of document.querySelectorAll(".author[href='/houndci-bot']")){
-  hideElement(findParent(element, ".js-timeline-item"))
-  hideElement(findParent(element, ".inline-comments"))
+for (var element of document.querySelectorAll(".author[href='/houndci-bot']")) {
+  method = puppyHushed ? showElement : hideElement
+
+  method(findParent(element, ".js-timeline-item"))
+  method(findParent(element, ".inline-comments"))
 }
+puppyHushed = !puppyHushed
