@@ -1,34 +1,49 @@
-console.log("Hush puppy!")
-if (typeof puppyHushed === "undefined") {
-  var puppyHushed = false
-}
-if (typeof findParent != 'function') {
-  var findParent = function(element, selector) {
-    var parents = [];
+chrome.runtime.onMessage.addListener((request) => {
+  updateElements(request.query);
+});
 
-    while (element = element.parentElement.closest(selector)) {
-      parents.push(element)
-    }
-    return parents[0]
-  };
+const findParent = (element, selector) => {
+  let parents = [];
 
-  var hideElement = function(element) {
-    if (element) {
-      element.style.display = "none";
-    }
+  while (element = element.parentElement.closest(selector)) {
+    parents.push(element);
   }
 
-  var showElement = function(element) {
-    if (element) {
-      element.style.display = "block";
-    }
-  }
+  return parents[0];
 }
 
-for (var element of document.querySelectorAll(".author[href='/houndci-bot']")) {
-  method = puppyHushed ? showElement : hideElement
-
-  method(findParent(element, ".js-timeline-item"))
-  method(findParent(element, ".inline-comments"))
+const hideElement = (element) => {
+  if (element) element.style.display = "none";
 }
-puppyHushed = !puppyHushed
+
+const showElement = (element) => {
+  if (element) element.style.display = "block";
+}
+
+const filterHidden = (elements) => (
+  elements.filter((element) => {
+    const timeline = findParent(element, ".js-timeline-item");
+    const comment = findParent(element, ".inline-comments");
+
+    return visible(timeline) || visible(comment)
+  })
+)
+
+const visible = (element) => {
+  if (!element) return null;
+
+  const style = window.getComputedStyle(element);
+
+  return (style.display != 'none') && (style.visibility != 'hidden');
+}
+
+const updateElements = (query) => {
+  const elements = document.querySelectorAll(query);
+  const hiddenElements = filterHidden([...elements])
+  action = hiddenElements.length ? hideElement : showElement;
+
+  elements.forEach(element => {
+      action(findParent(element, ".js-timeline-item"))
+      action(findParent(element, ".inline-comments"))
+  });
+}

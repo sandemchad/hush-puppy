@@ -13,6 +13,14 @@
     "default_icon": "logo.png"
   },
   "permissions": [
-    "activeTab"
+    "activeTab",
+    "contextMenus"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://github.com/*"],
+      "run_at": "document_idle",
+      "js": ["content.js"]
+    }
   ]
 }
