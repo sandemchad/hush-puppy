@@ -1,4 +1,7 @@
 # hush-puppy
+
+![](https://github.com/sandemchad/hush-puppy/blob/master/logo-128.png?raw=true)
+
 A chrome extension for hiding all houndci github comments to reduce the noise.
 
 ## To use
